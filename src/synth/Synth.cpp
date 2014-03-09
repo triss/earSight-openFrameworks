@@ -44,9 +44,9 @@ void Synth::addAudioOut(float * output, int bufferSize, int nChannels) {
 	// no need to do this for red/green
 
 	// reduce overall volume levels
-	for(int i = 0; i < bufferSize * nChannels; i++) {
-		output[i] *= SYNTH_AMP;
-	}
+	//for(int i = 0; i < bufferSize * nChannels; i++) {
+	//	output[i] *= SYNTH_AMP;
+	//}
 }
 
 // update sound volumes based on colour magnitudes

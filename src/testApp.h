@@ -34,11 +34,17 @@ class testApp : public ofBaseApp {
 		ofVideoGrabber 	vidGrabber;
 		unsigned char * image;
 		ofTexture 		videoTexture;
+
+		// video scaling
+		int 			xOffset;
+		int 			yOffset;
 		int 			camWidth;
 		int 			camHeight;
-		float 			camWidthScale;
-		float 			camHeightScale;
+		float 			scaling;
 
 		// function to return rgb values at x, y
 		void getImagePixelRGB(int x, int y, int * r, int * g, int * b);
+
+		// function that returns wether x, y screen coordinates are inside image or not
+		bool onImage(int x, int y);
 };

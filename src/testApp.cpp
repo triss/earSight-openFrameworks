@@ -35,18 +35,47 @@ void testApp::update(){
 		image = vidGrabber.getPixels();
 		videoTexture.loadData(image, camWidth, camHeight, GL_RGB);
 	}
+
+	scaling = MIN(ofGetWidth()/(float)camWidth, ofGetHeight()/(float)camHeight);
+
+	xOffset = (ofGetWidth() - (camWidth * scaling)) / 2;
+	yOffset = (ofGetHeight() - (camHeight * scaling)) / 2;
+}
+
+//--------------------------------------------------------------
+// test of finger/mouse is on image covered part of screen
+bool testApp::onImage(int x, int y){
+	return x > xOffset
+		&& y > yOffset
+		&& x < ofGetWidth() - xOffset
+		&& y < ofGetHeight() - yOffset;
 }
 
 //--------------------------------------------------------------
 void testApp::getImagePixelRGB(int x, int y, int * r, int * g, int * b){
-	*r = (int)image[((y * camWidth) + x) * 3];
-	*g = (int)image[((y * camWidth) + x) * 3 + 1];
-	*b = (int)image[((y * camWidth) + x) * 3 + 2];
+	// scale position on screen
+	x -= xOffset;
+	y -= yOffset;
+	x *= scaling;
+	y *= scaling;
+
+	// double check image scaling hasn't put us out of bounds
+	if(x >= camWidth) { x = camWidth - 1; }
+	if(x < 0) { x = 0; }
+	if(y >= camHeight) { y = camHeight - 1; }
+	if(y < 0) { y = 0; }
+
+	// work out position in image to read back
+	int imagePos = ((y * camWidth) + x) * 3;
+
+	*r = (int)image[imagePos];
+	*g = (int)image[imagePos + 1];
+	*b = (int)image[imagePos + 2];
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
-	videoTexture.draw(0, 0, ofGetWidth(), ofGetHeight());
+	videoTexture.draw(xOffset, yOffset, camWidth * scaling, camHeight * scaling);
 }
 
 //--------------------------------------------------------------
@@ -61,7 +90,7 @@ void testApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void testApp::mouseMoved(int x, int y){
-	if(x < camWidth && y < camHeight) {
+	if(onImage(x, y)) {
 		int r, g, b;
 
 		// get rgb from image int r, g, b;

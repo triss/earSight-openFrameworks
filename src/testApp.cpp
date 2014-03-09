@@ -19,7 +19,6 @@ void testApp::setup(){
 
 	// TODO what does this do?
 	ofSetVerticalSync(true);
-
 }
 
 //--------------------------------------------------------------
@@ -47,7 +46,7 @@ void testApp::getImagePixelRGB(int x, int y, int * r, int * g, int * b){
 
 //--------------------------------------------------------------
 void testApp::draw(){
-	videoTexture.draw(0, 0, camWidth, camHeight);
+	videoTexture.draw(0, 0, ofGetWidth(), ofGetHeight());
 }
 
 //--------------------------------------------------------------

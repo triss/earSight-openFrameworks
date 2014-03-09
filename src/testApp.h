@@ -36,6 +36,8 @@ class testApp : public ofBaseApp {
 		ofTexture 		videoTexture;
 		int 			camWidth;
 		int 			camHeight;
+		float 			camWidthScale;
+		float 			camHeightScale;
 
 		// function to return rgb values at x, y
 		void getImagePixelRGB(int x, int y, int * r, int * g, int * b);

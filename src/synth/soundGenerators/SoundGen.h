@@ -7,7 +7,7 @@ class SoundGen {
 
 	public:
 		virtual void addAudioOut(float *, int, int) {};
-		void setVolume(float volume);
+		virtual void setVolume(float volume);
 };
 
 #endif

@@ -3,23 +3,33 @@
 
 #include "ofMain.h"
 #include "SoundGen.h"
-#include "AudioConstants.h"
+#include "SynthConstants.h"
+
+#define FADING_IN 0
+#define FADING_OUT 1
+#define DOING_NOTHING 2
 
 class VolumeMod {
 	private:
 		float volume;
 
-		float fadeInPos;
-		float fadeOutPos;
+		float prevVolume;
+		float destVolume;
 
-		UGen * ugen;
+		int fadeInPos;
+		int fadeOutPos;
+
+		int status;
+
+		SoundGen * soundGen;
 
 	public:
-		void setVolume(float volume);
-		void fadeOut(float fadeOutTime);
-		void fadeTo(float fadeTime)
+		void fadeOut();
+		void fadeTo(float destVolume);
 
-	VolumeMod(UGen * ugen);
+		void modulateVolume(int bufferSize, int numChannels);
+
+	VolumeMod(SoundGen * soundGen, float maxVolume);
 };
 
 #endif

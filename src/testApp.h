@@ -2,12 +2,10 @@
 
 #include "ofMain.h"
 
-#include "soundGenerators/AudioConstants.h"
-#include "soundGenerators/SoundGen.h"
-#include "soundGenerators/Chord.h"
-#include "soundGenerators/PinkNoise.h" 
-
-#include "synth/SynthConstants.h"
+extern "C" {
+	#include "colourMapping/RGBtoColourMags.h"
+}
+#include "synth/Synth.h"
 
 class testApp : public ofBaseApp {
 	public:
@@ -25,11 +23,20 @@ class testApp : public ofBaseApp {
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
 
+		// sound generation setup
 		ofSoundStream soundStream;
 		void audioOut(float * output, int bufferSize, int nChannels);
 
-		//vector < SinOsc * > oscs;
-		Chord * c;
-		PinkNoise * n;
-		vector < SoundGen * > sgs;
+		// synth setup
+		Synth synth;
+
+		// video input
+		ofVideoGrabber 	vidGrabber;
+		unsigned char * image;
+		ofTexture 		videoTexture;
+		int 			camWidth;
+		int 			camHeight;
+
+		// function to return rgb values at x, y
+		void getImagePixelRGB(int x, int y, int * r, int * g, int * b);
 };

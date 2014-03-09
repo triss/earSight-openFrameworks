@@ -10,6 +10,7 @@ class Chord : public SoundGen {
 
 	public:
 		void addAudioOut(float * output, int bufferSize, int nChannels);
+		void setVolume(float volume);
 
 	Chord(float freqs[3], float volume);
 };

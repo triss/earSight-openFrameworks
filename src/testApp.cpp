@@ -2,33 +2,52 @@
 
 //--------------------------------------------------------------
 void testApp::setup(){
+	// initialise sound
 	soundStream.setup(this, 2, 0, SAMPLE_RATE, BUFFER_SIZE, 4);
+	
+	camWidth = 640;
+	camHeight = 480;
 
-	float f[3] = BLUE_FREQS;
-	c = new Chord(f, 0.1f);
-	n = new PinkNoise(0.9f);
+	// init web cam
+	vidGrabber.setDeviceID(0);
+	vidGrabber.setDesiredFrameRate(60);
+	vidGrabber.initGrabber(camWidth, camHeight);
 
-	sgs.push_back(c);
-	sgs.push_back(n);
+	// set size of image that we're grabbing
+	image = new unsigned char[camWidth*camWidth*3];
+	videoTexture.allocate(camWidth, camHeight, GL_RGB);
+
+	// TODO what does this do?
+	ofSetVerticalSync(true);
+
 }
 
 //--------------------------------------------------------------
 void testApp::audioOut(float * output, int bufferSize, int nChannels){
-	for(int i = 0; i < sgs.size(); i++) {
-	
-	//c->addAudioOut(output, bufferSize, nChannels);
-		sgs[i]->addAudioOut(output, bufferSize, nChannels);
-	}
+	synth.addAudioOut(output, bufferSize, nChannels);
 }
 
 //--------------------------------------------------------------
 void testApp::update(){
+	// grab frame of video
+	vidGrabber.update();
 
+	if(vidGrabber.isFrameNew()) {
+		image = vidGrabber.getPixels();
+		videoTexture.loadData(image, camWidth, camHeight, GL_RGB);
+	}
+}
+
+//--------------------------------------------------------------
+void testApp::getImagePixelRGB(int x, int y, int * r, int * g, int * b){
+	*r = (int)image[((y * camWidth) + x) * 3];
+	*g = (int)image[((y * camWidth) + x) * 3 + 1];
+	*b = (int)image[((y * camWidth) + x) * 3 + 2];
 }
 
 //--------------------------------------------------------------
 void testApp::draw(){
-
+	videoTexture.draw(0, 0, camWidth, camHeight);
 }
 
 //--------------------------------------------------------------
@@ -43,7 +62,20 @@ void testApp::keyReleased(int key){
 
 //--------------------------------------------------------------
 void testApp::mouseMoved(int x, int y){
+	if(x < camWidth && y < camHeight) {
+		int r, g, b;
 
+		// get rgb from image int r, g, b;
+		getImagePixelRGB(x, y, &r, &g, &b);
+		
+		// get colour magnitudes
+		double white, black, grey, blue, yellow, green, red;
+		rgbToColourMags(&white, &black, &grey, &green, &red, &blue, &yellow, r, g, b);	
+	
+		synth.mapColourMags(white, black, grey, green, red, blue, yellow);
+	} else {
+		synth.fadeOut();
+	}
 }
 
 //--------------------------------------------------------------

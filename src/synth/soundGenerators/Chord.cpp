@@ -11,3 +11,9 @@ void Chord::addAudioOut(float * output, int bufferSize, int nChannels) {
 		oscs[i]->addAudioOut(output, bufferSize, nChannels);
 	}
 }
+
+void Chord::setVolume(float volume) {
+	for(int i = 0; i < 3; i++) {
+		oscs[i]->setVolume(volume);
+	}
+}

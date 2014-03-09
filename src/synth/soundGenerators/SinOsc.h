@@ -2,6 +2,7 @@
 #define _SIN_OSC
 
 #include "ofMain.h"
+#include "SoundGen.h"
 #include "AudioConstants.h"
 
 class SinOsc : public SoundGen {
@@ -9,12 +10,10 @@ class SinOsc : public SoundGen {
 		float phase;
 		float phaseAdder;
 		float phaseAdderTarget;
-		//float volume;
 	
 	public:
 		void addAudioOut(float * output, int bufferSize, int nChannels);
 		void setFreq(float f);
-//		void setVolume(float v);
 
 	SinOsc(float freq, float volume);
 };

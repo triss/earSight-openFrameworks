@@ -1,4 +1,3 @@
-#include "SoundGen.h"
 #include "SinOsc.h"
 
 SinOsc::SinOsc(float freq, float volume) {
